@@ -49,4 +49,4 @@ async function logInUser (req:Request,res:Response){
     } 
 }
 
-export {registerUser,logInUser}
+export {registerUser,logInUser }

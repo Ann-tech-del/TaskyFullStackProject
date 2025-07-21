@@ -1,4 +1,4 @@
-import _React from 'react'
+import _React, { useState } from 'react'
 import {
   Box,
   Button,
@@ -6,10 +6,48 @@ import {
   TextField,
   Typography,
   Paper,
-  Link
+  Link,
+  Alert
 } from '@mui/material';
+import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../api/axiosInstance';
+import axios from 'axios';
+import useUser from '../store/userStore';
+interface LogInDetails{
+  identifier:string,
+  password : string
+}
 
 const Login = () => {
+  const {setUser}= useUser()
+  const navigate =useNavigate()
+  const [identifier, setIdentifier] = useState("")
+  const [password,setPassword] = useState('')
+  const [formError,setFormError] = useState('')
+  const {isPending,mutate} = useMutation({
+    mutationKey:["Login_User"],
+    mutationFn: async (LogInDetails :LogInDetails) =>{
+    const response = await axiosInstance.post("/api/auth/login",LogInDetails)
+    console.log(response)
+    return response.data
+    },
+        onError: (err) => {
+  if (axios.isAxiosError(err)) {
+    setFormError(err.response?.data.message);
+  } else {
+    setFormError('Something went wrong');
+  }
+},
+onSuccess:(data)=>{
+  setUser(data)
+   navigate('/tasks')
+ }
+  })
+  function handleLogIn(){
+    setFormError ("")
+    mutate({identifier,password})
+  }
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: { xs: 'column', md: 'row' , bgcolor:'red'} }}>
       
@@ -36,27 +74,32 @@ const Login = () => {
           </Typography>
           <Box component="form">
             <Stack spacing={2} sx={{ mb: 4 }}>
+              {formError && <Alert severity="error">{formError}</Alert>}
               <TextField
                 fullWidth
                 label="Email or username"
-                type="email"
-              
+                
+              value={identifier}
+              onChange={(e)=>setIdentifier(e.target.value)}
               />
               <TextField
                 fullWidth
                 label="Password"
                
                 type="password"
-                
+                value={password}
+                onChange={(e)=> setPassword(e.target.value)}
               />
             </Stack>
             <Button
-              type="submit"
+              
               fullWidth
               variant="contained"
               color="primary"
               size="large"
               sx={{ fontWeight: 700, borderRadius: 2, mb: 2 }}
+              onClick={handleLogIn}
+              loading={isPending}
             >
               Sign In
             </Button>

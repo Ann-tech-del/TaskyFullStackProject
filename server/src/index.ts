@@ -1,8 +1,14 @@
 import express, {Express} from 'express'
 import authRouter from './routes/auth.routes';
+import cors from 'cors'
 const app :Express= express()
 
 app.use(express.json({ limit: '10mb' }));
+app.use(cors({
+origin:["http://localhost:5173"],
+methods:["PUT","GET","POST","DELETE","PATCH"] ,
+credentials: true,   
+}))
 
 
 app.get('/',(_req,res)=>{
