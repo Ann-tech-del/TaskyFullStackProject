@@ -9,6 +9,9 @@ const getAllTasks = async (req: Request, res: Response) => {
       where: {
         isDeleted: false,
       },
+      orderBy: {
+        dateCreated: 'desc', // Order by creation date descending
+      },
       include: {
         user: {
           select: {
