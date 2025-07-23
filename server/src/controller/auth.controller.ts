@@ -49,4 +49,23 @@ async function logInUser (req:Request,res:Response){
     } 
 }
 
-export {registerUser,logInUser }
+async function updateUser(req: Request, res: Response) {
+  try {
+    const { id } = req.user;
+    const { firstName, lastName, email, avatar } = req.body;
+    const updatedUser = await client.user.update({
+      where: { id },
+      data: {
+        firstName: firstName || undefined,
+        lastName: lastName || undefined,
+        email: email || undefined,
+        avatar: avatar || undefined,
+      },
+    });
+    res.status(200).json({ message: "User updated successfully", user: updatedUser });
+  } catch (e) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+}
+
+export {registerUser,logInUser,updateUser}

@@ -66,16 +66,14 @@ const Header = () => {
             <Typography variant="body1" fontWeight="600" sx={{ color: '#6d3b09' }}>
               Welcome {user.firstName}
             </Typography>
-               {user.profileImageUrl ? (
-              <Avatar sx={{ height: 50, width: 50 }}>
-                {" "}
-                <img src={user.profileImageUrl} alt="" width={80} />
+            {user.avatar ? (
+              <Avatar sx={{ height: 50, width: 50 }} src={user.avatar} />
+            ) : (
+              <Avatar sx={{ bgcolor: '#d7263d', color: '#fff' }}>
+                {user.firstName[0].toUpperCase()}
+                {user.lastName[0].toUpperCase()}
               </Avatar>
-            ) :
-            <Avatar sx={{ bgcolor: '#d7263d', color: '#fff' }}>
-              {user.firstName[0].toUpperCase()}
-              {user.lastName[0].toUpperCase()}
-            </Avatar>}
+            )}
             <Button color="error" onClick={handleLogout}>
               Logout
             </Button>

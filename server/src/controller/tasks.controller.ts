@@ -5,12 +5,14 @@ import { client } from "../config/prismaConfig";
 
 const getAllTasks = async (req: Request, res: Response) => {
   try {
+    const { id: userId } = req.user;
     const allTasks = await client.task.findMany({
       where: {
         isDeleted: false,
+        userId: userId,
       },
       orderBy: {
-        dateCreated: 'desc', // Order by creation date descending
+        dateCreated: 'desc',
       },
       include: {
         user: {
@@ -60,25 +62,28 @@ const getSpecificTask = async (req: Request, res: Response) => {
 };
 
  const deleteTask = async (req: Request, res: Response) => {
-  const { TaskId } = req.params;
+  const { id } = req.params;
+  console.log('Delete request for task id:', id);
   try {
     const exists = await client.task.findFirst({
       where: {
-        AND: [{ id: TaskId }, { isDeleted: false }],
+        AND: [{ id: id }, { isDeleted: false }],
       },
     });
+    console.log('Task found:', exists);
     if (!exists) {
       res.status(404).json({ message: "Not found." });
       return;
     }
     const deletedTask = await client.task.update({
-      where: { id: TaskId },
+      where: { id: id },
       data: {
         isDeleted: true,
       },
     });
     res.status(200).json({ message: "Task deleted successfully" });
   } catch (e) {
+    console.error('Delete task error:', e);
     res.status(500).json({ message: "Something went wrong." });
   }
 };
@@ -176,4 +181,31 @@ async function updateTask(req: Request, res: Response) {
     res.status(500).json({ message: "Something went wrong." });
   }
 };
-export {getAllTasks,getSpecificTask,createTask,deleteTask,updateTask,getUserSpecificBlogs}
+
+const markTaskAsComplete = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const updatedTask = await client.task.update({
+      where: { id },
+      data: { isCompleted: true },
+    });
+    res.status(200).json({ message: "Task marked as complete", task: updatedTask });
+  } catch (e) {
+    res.status(500).json({ message: "Something went wrong." });
+  }
+};
+
+const markTaskAsIncomplete = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const updatedTask = await client.task.update({
+      where: { id },
+      data: { isCompleted: false },
+    });
+    res.status(200).json({ message: "Task marked as incomplete", task: updatedTask });
+  } catch (e) {
+    res.status(500).json({ message: "Something went wrong." });
+  }
+};
+
+export {getAllTasks,getSpecificTask,createTask,deleteTask,updateTask,getUserSpecificBlogs,markTaskAsComplete,markTaskAsIncomplete}

@@ -7,7 +7,7 @@ interface User {
   lastName: string;
   email: string;
   username: string;
-  profileImageUrl: string | null | undefined;
+  avatar: string | null | undefined;
 }
 
 interface UserStore {
