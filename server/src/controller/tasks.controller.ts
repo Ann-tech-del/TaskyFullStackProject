@@ -55,7 +55,7 @@ const getSpecificTask = async (req: Request, res: Response) => {
       res.status(404).json({ message: "Not found." });
       return;
     }
-    res.status(200).json({ message: "Fetched blog successfully", tasks });
+    res.status(200).json({ message: " blog  fetched successfully", tasks });
   } catch (_e) {
     res.status(500).json({ message: "Something went wrong." });
   }
@@ -84,6 +84,33 @@ const getSpecificTask = async (req: Request, res: Response) => {
     res.status(200).json({ message: "Task deleted successfully" });
   } catch (e) {
     console.error('Delete task error:', e);
+    res.status(500).json({ message: "Something went wrong." });
+  }
+};
+
+ const restoreTask = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  console.log('restore request for task id:', id);
+  try {
+    const exists = await client.task.findFirst({
+      where: {
+        AND: [{ id: id }, { isDeleted: true }],
+      },
+    });
+    console.log('Task found:', exists);
+    if (!exists) {
+      res.status(404).json({ message: "Not found." });
+      return;
+    }
+    const restoredTask = await client.task.update({
+      where: { id: id },
+      data: {
+        isDeleted: false,
+      },
+    });
+    res.status(200).json({ message: "Task restored successfully",restoredTask });
+  } catch (e) {
+    console.error('restore  task error:', e);
     res.status(500).json({ message: "Something went wrong." });
   }
 };
@@ -208,4 +235,22 @@ const markTaskAsIncomplete = async (req: Request, res: Response) => {
   }
 };
 
-export {getAllTasks,getSpecificTask,createTask,deleteTask,updateTask,getUserSpecificBlogs,markTaskAsComplete,markTaskAsIncomplete}
+const getTrashTasks = async (req: Request, res: Response) => {
+  try {
+    const { id: userId } = req.user;
+    const trashTasks = await client.task.findMany({
+      where: {
+        isDeleted: true,
+        userId: userId,
+      },
+      orderBy: {
+        dateCreated: 'desc',
+      },
+    });
+    res.status(200).json({ trashTasks });
+  } catch (_e) {
+    res.status(500).json({ message: "Something went wrong." });
+  }
+};
+
+export {getAllTasks,getSpecificTask,createTask,deleteTask,updateTask,getUserSpecificBlogs,markTaskAsComplete,markTaskAsIncomplete,restoreTask,getTrashTasks}

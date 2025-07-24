@@ -33,7 +33,7 @@ const Header = () => {
   function handleLogout() {
     localStorage.clear();
     logoutUser();
-    navigate("/login");
+    navigate("/");
   }
   
   if (user) {
@@ -63,7 +63,7 @@ const Header = () => {
 
           
           <Box display="flex" alignItems="center" gap={2}>
-            <Typography variant="body1" fontWeight="600" sx={{ color: '#6d3b09' }}>
+            <Typography variant="body1" fontWeight="600" sx={{ color: '#6d3b09',textTransform:'capitalize' }}>
               Welcome {user.firstName}
             </Typography>
             {user.avatar ? (

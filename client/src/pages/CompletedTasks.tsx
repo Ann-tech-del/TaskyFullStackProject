@@ -1,4 +1,4 @@
-import React from 'react'
+import _React, { useState } from 'react'
 import LayOut from '../components/Layout'
 import { Box, Typography, Button, Stack } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -6,9 +6,14 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axiosInstance from '../api/axiosInstance';
 import Alert from '@mui/material/Alert';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import TaskModal from '../components/TaskModal';
+import { useNavigate } from 'react-router-dom';
 
 const CompletedTasks = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { data, isLoading, isError } = useQuery({
     queryKey: ['completed-tasks'],
     queryFn: async () => {
@@ -17,7 +22,7 @@ const CompletedTasks = () => {
     }
   });
 
-  // Mark as incomplete mutation
+  
   const incompleteMutation = useMutation({
     mutationFn: async (id: string) => {
       await axiosInstance.patch(`/api/tasks/${id}/incomplete`);
@@ -32,11 +37,60 @@ const CompletedTasks = () => {
     incompleteMutation.mutate(id);
   };
 
+  
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editingTask, setEditingTask] =useState<any>(null);
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, title, description }: { id: string; title: string; description: string }) => {
+      await axiosInstance.put(`/api/tasks/${id}`, { title, description });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['completed-tasks'] });
+      setModalOpen(false);
+    }
+  });
+  const handleEdit = (task: any) => {
+    setEditingTask(task);
+    setModalOpen(true);
+  };
+  const handleUpdate = (data: { title: string; description: string }) => {
+    if (editingTask) {
+      updateMutation.mutate({ id: editingTask.id, ...data });
+    }
+  };
+  
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await axiosInstance.delete(`/api/tasks/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['completed-tasks'] });
+      queryClient.invalidateQueries({ queryKey: ['all-tasks'] });
+    }
+  });
+  const handleDelete = (id: string) => {
+    if (window.confirm('Are you sure you want to delete this task?')) {
+      deleteMutation.mutate(id);
+    }
+  };
+
   return (
     <LayOut>
       <Box sx={{ p: 4, background: '#fff1e6', minHeight: '100vh' }}>
         {isLoading && <Alert severity="info">Loading completed tasks...</Alert>}
         {isError && <Alert severity="error">Failed to load completed tasks.</Alert>}
+        {data?.length === 0 && !isLoading && !isError && (
+          <Box textAlign="center" width="100%" my={4}>
+            <Typography variant="h6" mb={2}>No completed tasks yet.</Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => navigate('/tasks')}
+            >
+              View active tasks
+            </Button>
+          </Box>
+        )}
         <Stack
           direction="row"
           flexWrap="wrap"
@@ -80,7 +134,7 @@ const CompletedTasks = () => {
                 </Typography>
               </Stack>
               <Button
-                variant="contained"
+                variant="outlined"
                 color="success"
                 startIcon={<CheckCircleIcon />}
                 sx={{ fontWeight: 700, mt: 1 }}
@@ -90,10 +144,40 @@ const CompletedTasks = () => {
               >
                 Mark as Incomplete
               </Button>
+              <Stack direction="row" spacing={1} mt={1}>
+                <Button
+                  variant="outlined"
+                  startIcon={<EditIcon />}
+                  sx={{ fontWeight: 700, borderColor: 'fuchsia', color: '#6d3b09', flex: 1 }}
+                  fullWidth
+                  onClick={() => handleEdit(task)}
+                  disabled={updateMutation.status === 'pending'}
+                >
+                  UPDATE
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  startIcon={<DeleteIcon />}
+                  sx={{ fontWeight: 700, flex: 1, bgcolor: '#d7263d', '&:hover': { bgcolor: '#b91c2e' } }}
+                  fullWidth
+                  onClick={() => handleDelete(task.id)}
+                  disabled={deleteMutation.status === 'pending'}
+                >
+                  DELETE
+                </Button>
+              </Stack>
             </Box>
           ))}
         </Stack>
       </Box>
+      <TaskModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSave={handleUpdate}
+        initialTitle={editingTask?.title}
+        initialDescription={editingTask?.description}
+      />
     </LayOut>
   )
 }

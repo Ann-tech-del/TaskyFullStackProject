@@ -1,12 +1,11 @@
-import React, { useState } from 'react'
+import _React, { useState } from 'react'
 import {
-  Stack,
+  
   TextField,
   Typography,
   Button,
   Alert,
-  TextareaAutosize,
-  InputLabel,
+  
   Box,
   
 } from "@mui/material";
@@ -39,7 +38,8 @@ const NewTasks = () => {
 },
     onSuccess: () => {
       setIsSuccessFull("Task created successfully.");
-      // clearForm();
+      setTitle("")
+      setDescription("")
     },
 
     });

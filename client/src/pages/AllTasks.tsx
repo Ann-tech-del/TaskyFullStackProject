@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import _React, { useState } from 'react'
 import LayOut from '../components/Layout'
 import { Box, Typography, Button, IconButton, Stack,  } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -161,7 +161,7 @@ const AllTasks = () => {
                 <Button
                   variant="outlined"
                   startIcon={<EditIcon />}
-                  sx={{ fontWeight: 700, borderColor: '#222', color: '#222', flex: 1 }}
+                  sx={{ fontWeight: 700, borderColor: 'fuchsia', color: '#6d3b09', flex: 1 }}
                   fullWidth
                   onClick={() => handleEdit(task)}
                   disabled={updateMutation.status === 'pending'}
