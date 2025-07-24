@@ -1,15 +1,19 @@
 import _React, { useState } from 'react'
 import LayOut from '../components/Layout'
-import { Box, Typography, Button, IconButton, Stack,  } from '@mui/material';
+import { Box, Typography, Button, Stack,  } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
+
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axiosInstance from '../api/axiosInstance';
 import Alert from '@mui/material/Alert';
 import TaskModal from '../components/TaskModal';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
 
 
 const AllTasks = () => {
@@ -26,6 +30,8 @@ const AllTasks = () => {
   
   const [modalOpen, setModalOpen] = useState(false);
   const [editingTask, setEditingTask] =useState<any>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteTaskId, setDeleteTaskId] = useState<string | null>(null);
 
   
   const updateMutation = useMutation({
@@ -71,9 +77,19 @@ const AllTasks = () => {
   };
 
   const handleDelete = (id: string) => {
-    if (window.confirm('Are you sure you want to delete this task?')) {
-      deleteMutation.mutate(id);
+    setDeleteTaskId(id);
+    setDeleteDialogOpen(true);
+  };
+  const handleDeleteConfirm = () => {
+    if (deleteTaskId) {
+      deleteMutation.mutate(deleteTaskId);
     }
+    setDeleteDialogOpen(false);
+    setDeleteTaskId(null);
+  };
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
+    setDeleteTaskId(null);
   };
 
   const handleMarkComplete = (id: string) => {
@@ -89,6 +105,16 @@ const AllTasks = () => {
         initialTitle={editingTask?.title}
         initialDescription={editingTask?.description}
       />
+      <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel}>
+        <DialogTitle>Delete Task</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to delete this task?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCancel} color="secondary" variant="outlined">Cancel</Button>
+          <Button onClick={handleDeleteConfirm} color="error" variant="contained">Delete</Button>
+        </DialogActions>
+      </Dialog>
       <Box sx={{ p: 4, background: '#fff1e6', minHeight: '100vh' }}>
         {isLoading && <Alert severity="info">Loading tasks...</Alert>}
         {isError && <Alert severity="error">Failed to load tasks.</Alert>}

@@ -10,6 +10,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import TaskModal from '../components/TaskModal';
 import { useNavigate } from 'react-router-dom';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
 
 const CompletedTasks = () => {
   const queryClient = useQueryClient();
@@ -68,10 +72,22 @@ const CompletedTasks = () => {
       queryClient.invalidateQueries({ queryKey: ['all-tasks'] });
     }
   });
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteTaskId, setDeleteTaskId] = useState<string | null>(null);
   const handleDelete = (id: string) => {
-    if (window.confirm('Are you sure you want to delete this task?')) {
-      deleteMutation.mutate(id);
+    setDeleteTaskId(id);
+    setDeleteDialogOpen(true);
+  };
+  const handleDeleteConfirm = () => {
+    if (deleteTaskId) {
+      deleteMutation.mutate(deleteTaskId);
     }
+    setDeleteDialogOpen(false);
+    setDeleteTaskId(null);
+  };
+  const handleDeleteCancel = () => {
+    setDeleteDialogOpen(false);
+    setDeleteTaskId(null);
   };
 
   return (
@@ -178,6 +194,18 @@ const CompletedTasks = () => {
         initialTitle={editingTask?.title}
         initialDescription={editingTask?.description}
       />
+      <Box sx={{backdropFilter:"blur(5px)"}}>
+        <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel} >
+        <DialogTitle>Delete Task</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to delete this task?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCancel} color="secondary" variant="outlined">Cancel</Button>
+          <Button onClick={handleDeleteConfirm} color="error" variant="contained">Delete</Button>
+        </DialogActions>
+      </Dialog>
+      </Box>
     </LayOut>
   )
 }
