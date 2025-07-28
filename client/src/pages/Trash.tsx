@@ -10,14 +10,14 @@ const Trash = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['trash-tasks'],
     queryFn: async () => {
-      const res = await axiosInstance.get('/api/tasks/trash');
-      return res.data.trashTasks;
+      const res = await axiosInstance.get('/api/tasks');
+      return res.data.allTasks.filter((task:any) => task.isDeleted);
     }
   });
 
   const restoreMutation = useMutation({
     mutationFn: async (id: string) => {
-      await axiosInstance.patch(`/api/tasks/restore/${id}`);
+      await axiosInstance.patch(`/api/tasks/${id}/restore`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['trash-tasks'] });
@@ -33,7 +33,7 @@ const Trash = () => {
   return (
     <LayOut>
       <Box sx={{ p: 4, background: '#fff1e6', minHeight: '100vh' }}>
-        <Typography variant="h3" color="error" mb={3} sx={{fontSize:'1.2rem', fontWeight:500}}>
+        <Typography variant="body1" color="error" mb={3}>
           Items in trash will be deleted after 30 days.
         </Typography>
         {isLoading && <Alert severity="info">Loading deleted tasks...</Alert>}
@@ -53,7 +53,6 @@ const Trash = () => {
               flex: '1 1 300px',
               maxWidth: '340px',
               minWidth: '280px',
-              alignItems:'center'
             },
           }}
         >
