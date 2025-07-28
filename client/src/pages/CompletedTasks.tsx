@@ -22,7 +22,7 @@ const CompletedTasks = () => {
     queryKey: ['completed-tasks'],
     queryFn: async () => {
       const res = await axiosInstance.get('/api/tasks');
-      return res.data.allTasks.filter((task:any) => task.isCompleted);
+      return res.data.allTasks.filter((task:any) => task.isCompleted && !task.isDeleted);
     }
   });
 
