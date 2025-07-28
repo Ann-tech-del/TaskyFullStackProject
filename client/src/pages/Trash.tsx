@@ -10,8 +10,8 @@ const Trash = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['trash-tasks'],
     queryFn: async () => {
-      const res = await axiosInstance.get('/api/tasks');
-      return res.data.allTasks.filter((task:any) => task.isDeleted);
+      const res = await axiosInstance.get('/api/tasks/trash');
+      return res.data.trashTasks;
     }
   });
 
