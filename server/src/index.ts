@@ -9,8 +9,9 @@ const app :Express= express()
 
 app.use(express.json({ limit: '10mb' }));
 app.use(cookieParser());
+const allowedOrigins = ['https://tasky-full-stack-project.vercel.app'];
 app.use(cors({
-origin:["https://tasky-full-stack-project.vercel.app"],
+origin:allowedOrigins,
 methods:["PUT","GET","POST","DELETE","PATCH"] ,
 credentials: true,   
 }))
