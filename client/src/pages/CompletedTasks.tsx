@@ -70,6 +70,7 @@ const CompletedTasks = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['completed-tasks'] });
       queryClient.invalidateQueries({ queryKey: ['all-tasks'] });
+      queryClient.invalidateQueries({ queryKey: ['trash-tasks'] }); 
     }
   });
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);

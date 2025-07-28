@@ -51,6 +51,7 @@ const AllTasks = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['all-tasks'] });
+      queryClient.invalidateQueries({ queryKey: ['trash-tasks'] }); 
     }
   });
 

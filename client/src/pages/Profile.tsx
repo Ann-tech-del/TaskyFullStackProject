@@ -229,7 +229,7 @@ const Profile = () => {
         
         <Box sx={{ background: '#fff', borderRadius: 3, boxShadow: 2, p: 3, position: 'relative' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
-            <Typography variant="h6" fontWeight={700} color="#184c32">Change Password</Typography>
+            <Typography variant="h6" fontWeight={700} color="secondary.main">Change Password</Typography>
             <Button
               variant="outlined"
               color="secondary"
@@ -280,7 +280,7 @@ const Profile = () => {
               </Stack>
             </form>
           ) : (
-            <Typography color="text.secondary">Click Edit to change your password.</Typography>
+            <Typography color="text.secondary" sx={{fontSize:"1.2rem"}}>Click Edit to update your password.</Typography>
           )}
         </Box>
       </Box>
