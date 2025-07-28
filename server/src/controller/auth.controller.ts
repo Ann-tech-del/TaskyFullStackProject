@@ -42,7 +42,15 @@ async function logInUser (req:Request,res:Response){
     }
     const {password:userPassword , dateJoined,lastProfileUpdate, ...userDetails} = user
      const token = jwt.sign(userDetails,process.env.JWT_SECRET!)
-     res.cookie("authToken",token).json(userDetails)
+     res.cookie("authToken", token, {
+  httpOnly: true,         
+  secure: true,           
+  sameSite: 'none',      
+  maxAge: 7 * 24 * 60 * 60 * 1000, 
+  path: '/',             
+});
+res.status(200).json(userDetails);
+
   }
     catch(e){ 
        res.status(500).json({ Message: "Something went wrong" });
