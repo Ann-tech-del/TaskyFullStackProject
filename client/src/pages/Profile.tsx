@@ -158,8 +158,9 @@ const Profile = () => {
   };
 
   return (
-    <LayOut>
-      <Box sx={{ maxWidth: 900, mx: 'auto', mt: 6, p: 0, backgroundColor: '#fff1e6' }}>
+    <Box sx={{backgroundColor: '#fff1e6'}}>
+      <LayOut>
+      <Box sx={{ maxWidth: 900, mx: 'auto', mt: 6, p: 0,  }}>
         
         <Box sx={{ background: '#fff', borderRadius: 3, boxShadow: 2, p: 3, mb: 4, position: 'relative' }}>
           <Stack alignItems="center" mb={3}>
@@ -285,6 +286,7 @@ const Profile = () => {
         </Box>
       </Box>
     </LayOut>
+    </Box>
   );
 };
 
