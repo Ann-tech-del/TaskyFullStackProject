@@ -180,7 +180,7 @@ const Profile = () => {
               variant="outlined"
               
               size="small"
-              sx={{ borderRadius: 2, textTransform: 'none', fontWeight: 600 }}
+              sx={{ borderRadius: 2, textTransform: 'none', fontWeight: 600,color:'#6d3b09' }}
               onClick={() => setEditMode((prev) => !prev)}
             >
               {editMode ? 'Cancel' : 'Edit'}
@@ -207,19 +207,19 @@ const Profile = () => {
           ) : (
             <Stack direction="row" spacing={3}>
               <Stack spacing={1} flex={1}>
-                <Typography fontSize={14} color="text.secondary" sx={{fontWeight:500}}>First Name</Typography>
+                <Typography  color="text.secondary" sx={{fontWeight:500 ,fontSize:'1.2rem'}}>First Name</Typography>
                 <Typography fontWeight={600} color='secondary.main' sx={{textTransform:'capitalize'}}>{form.firstName}</Typography>
               </Stack>
               <Stack spacing={1} flex={1}>
-                <Typography fontSize={14} color="text.secondary">Last Name</Typography>
+                <Typography   color="text.secondary" sx={{fontWeight:500,fontSize:'1.2rem'}}>Last Name</Typography>
                 <Typography fontWeight={600} color='secondary.main' sx={{textTransform:'capitalize'}}>{form.lastName}</Typography>
               </Stack>
               <Stack spacing={1} flex={1}>
-                <Typography fontSize={14} color="text.secondary">Email Address</Typography>
+                <Typography  color="text.secondary" sx={{fontSize:'1.2rem',fontWeight:500}}>Email Address</Typography>
                 <Typography fontWeight={600} color='secondary.main'>{form.email}</Typography>
               </Stack>
               <Stack spacing={1} flex={1}>
-                <Typography fontSize={14} color="text.secondary">Username</Typography>
+                <Typography  color="text.secondary" sx={{fontSize:'1.2rem',textTransform:'capitalize',fontWeight:500}}>User Name</Typography>
                 <Typography fontWeight={600} color='secondary.main'>{form.username}</Typography>
               </Stack>
             </Stack>

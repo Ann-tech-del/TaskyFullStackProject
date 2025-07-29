@@ -24,6 +24,10 @@ const navLinks = [
   {
     label: "Profile",
     path: "/tasks/Profile"
+  },
+  {
+    label: "Testimonial",
+    path: "/tasks/testimonial"
   }
 ];
 

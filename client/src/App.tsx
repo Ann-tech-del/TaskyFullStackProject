@@ -7,6 +7,7 @@ import Trash from './pages/Trash'
 import Profile from './pages/Profile'
 import NewTasks from './pages/NewTasks'
 import CompletedTasks from './pages/CompletedTasks'
+import Testimonial from './pages/Testimonial';
 import AllTasks from './pages/AllTasks'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
@@ -66,6 +67,14 @@ function App() {
     element={
       <Protected>
         <CompletedTasks />
+      </Protected>
+    }
+  />
+  <Route
+    path="testimonial"
+    element={
+      <Protected>
+        <Testimonial />
       </Protected>
     }
   />
