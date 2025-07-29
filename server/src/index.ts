@@ -4,7 +4,6 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import taskRouter from './routes/tasks.routes';
 import userRouter from './routes/user.routes';
-import testimonialsRouter from './routes/testimonials.routes';
 const app :Express= express()
 
 
@@ -25,7 +24,6 @@ app.get('/',(_req,res)=>{
 app.use("/api/auth",authRouter )
 app.use("/api",taskRouter)
 app.use("/api",userRouter)
-app.use("/api",testimonialsRouter)
 
 
 

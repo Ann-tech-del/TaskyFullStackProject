@@ -9,16 +9,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Testimonial {
-  id        String   @id @default(uuid()) @map("id")
-  message   String   @map("message")
-  createdAt DateTime @default(now()) @map("created_at")
-  userId    String   @map("user_id")
-  user      User     @relation(fields: [userId], references: [id])
-
-  @@map("testimonials")
-}
-
 model User {
   id                String   @id @default(uuid()) @map("id")
   firstName         String   @map("first_name")
@@ -31,7 +21,6 @@ model User {
   lastProfileUpdate DateTime @updatedAt @map("last_profile_update")
   isDeleted         Boolean  @default(false) @map("is_deleted")
   tasks             Task[]   
-  testimonials     Testimonial[]
 
   @@map("users")
 }
