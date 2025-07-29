@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getTestimonials, addTestimonial } from '../controller/testimonials.controller';
+import { getTestimonials,addTestimonial } from '../controller/testimonials.controller';
 import verifyUser from '../mildware/verifyUser';
 
 const testimonialsRouter = Router();
