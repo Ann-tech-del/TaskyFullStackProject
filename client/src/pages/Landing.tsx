@@ -12,10 +12,10 @@ const Landing = () => {
 
 <Box sx={{ minHeight: '100vh', background: 'linear-gradient(135deg, #ffe5d9 0%, #fff1e6 100%)', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
       <Container maxWidth="md" sx={{ textAlign: 'center', pt: 8 }}>
-        <Typography variant="h2" component="h1" fontWeight={900} sx={{ mb: 2, color: '#6d3b09', fontFamily: 'serif' }}>
-          Easy Manage Your Task
+        <Typography variant="h2" component="h1" fontWeight={900} sx={{ mb: 2, color: '#6d3b09', fontFamily: '"Open Sans", sans-serif' }}>
+          Easily Manage Your Task
         </Typography>
-        <Typography variant="h3" component="div" fontWeight={900} sx={{ mb: 2, color: '#d7263d', fontFamily: 'serif' }}>
+        <Typography variant="h3" component="div" fontWeight={900} sx={{ mb: 2, color: '#d7263d', fontFamily: '"Open Sans", sans-serif' }}>
           <span style={{ color: '#d7263d', background: 'rgba(255,255,255,0.5)', borderRadius: 4, padding: '0 8px' }}>
             anywhere and anytime<br />quickly
           </span>

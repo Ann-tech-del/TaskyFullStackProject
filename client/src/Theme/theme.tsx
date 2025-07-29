@@ -14,7 +14,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'serif, Roboto, Arial',
+    fontFamily: '"Open Sans", sans-serif',  
     h2: {
       fontWeight: 900,
       color: '#6d3b09',
@@ -32,4 +32,4 @@ const theme = createTheme({
   },
 });
 
-export default theme; 
+export default theme;
