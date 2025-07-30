@@ -24,7 +24,7 @@ const navLinks = [
   {
     label: "Profile",
     path: "/tasks/Profile"
-  }
+  },
  
 ];
 
@@ -32,10 +32,10 @@ const Header = () => {
   const { user,logoutUser } = useUserStore();
    const navigate = useNavigate();
   function handleLogout() {
-    localStorage.clear();
-    logoutUser();
-    navigate("/");
-  }
+  localStorage.removeItem("token"); 
+  logoutUser?.();                   
+  navigate("/");
+}
   
   if (user) {
     return (
